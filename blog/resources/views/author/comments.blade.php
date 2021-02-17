@@ -19,7 +19,7 @@
                     <div class="header">
                         <h2>
                             All Comments
-                            <span class="badge bg-blue" > {{ $comments->count() }} </span>
+{{--                            <span class="badge bg-blue" > {{ $posts->comments->count() }} </span>--}}
                         </h2>
                     </div>
                     <div class="body">
@@ -40,8 +40,10 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                @foreach($comments as $key=>$comment)
-                                    <tr>
+                                @foreach($posts as $key=>$post)
+                                    @foreach($post->comments as $key=>$comment)
+
+                                        <tr>
                                         <td>
                                             <div class="media">
                                                 <div class="media-left" >
@@ -82,12 +84,14 @@
                                             <button class="btn btn-danger" type="button" onclick="deleteComment({{ $comment->id }})" >
                                                 <i class="material-icons">delete</i>
                                             </button>
-                                            <form action="{{ route('admin.comment.destroy',$comment->id) }}" method="post" id="delete-form-{{$comment->id}}" style="display: none">
+                                            <form action="{{ route('author.comment.destroy',$comment->id) }}" method="post" id="delete-form-{{$comment->id}}" style="display: none">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
                                         </td>
                                     </tr>
+                                    @endforeach
+
                                 @endforeach
                                 </tbody>
 

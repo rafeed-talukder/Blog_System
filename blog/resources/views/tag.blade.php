@@ -1,7 +1,7 @@
 @extends('layouts.frontend.app')
 
 @section('tittle')
-    Category
+    Tag
 @endsection
 
 @push('css')
@@ -13,7 +13,7 @@
         .header-bg{
             width: 100%;
             height: 350px;
-            background-image: url("{{ asset('storage/category/'.$category->image) }}");
+            {{--background-image: url("{{ asset('storage/category/'.$category->image) }}");--}}
             background-size: cover;
 
         }
@@ -27,22 +27,22 @@
 @section('content')
 
     <div class="slider display-table center-text header-bg">
-        <h1 class="title display-table-cell"><b>{{ $category->name }}</b></h1>
+        <h1 class="title display-table-cell"><b>{{ $tag->name }}</b></h1>
     </div><!-- slider -->
 
     <section class="blog-area section">
         <div class="container">
 
             <div class="row">
-                @if($category->posts->count() > 0)
-                @foreach($category->posts as $post)
+                @if($posts->count() > 0)
+                @foreach($posts as $post)
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100">
                             <div class="single-post post-style-1">
 
                                 <div class="blog-image"><img src="{{ asset('storage/post/'.$post->image) }}" alt="{{ $post->tittle }}"></div>
 
-                                <a class="avatar" href=""><img src="{{ asset('storage/profile/'.$post->user->image) }}" alt="Profile Image"></a>
+                                <a class="avatar" href="{{ route('author.profile',$post->user->username) }}"><img src="{{ asset('storage/profile/'.$post->user->image) }}" alt="Profile Image"></a>
 
                                 <div class="blog-info">
 

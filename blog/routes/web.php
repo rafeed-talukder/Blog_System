@@ -16,6 +16,13 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('posts','PostController@index')->name('post.index');
 Route::get('post/{slug}','PostController@details')->name('post.details');
 
+Route::get('/category/{slug}','PostController@postByCategory')->name('category.posts');
+Route::get('/tag/{slug}','PostController@postByTag')->name('tag.posts');
+
+Route::get('profile/{username}','AuthorController@profile')->name('author.profile');
+
+Route::get('/search','SearchController@search')->name('search');
+
 Route::post('subscriber','SubscriberController@store')->name('subscriber.store');
 
 Auth::routes();
@@ -43,6 +50,12 @@ Route::group(['as'=>'admin.','prefix'=>'admin','namespace'=>'Admin','middleware'
 
     Route::get('/favorite','FavoriteController@index')->name('favorite.index');
 
+    Route::get('authors','AuthorController@index')->name('author.index');
+    Route::delete('authors/{id}','AuthorController@destroy')->name('author.destroy');
+
+    Route::get('comments/','CommentController@index')->name('comment.index');
+    Route::delete('comments/{id}','CommentController@destroy')->name('comment.destroy');
+
     Route::get('/subscriber','SubscriberController@index')->name('subscriber.index');
     Route::delete('/subscriber/{subscriber}','SubscriberController@destroy')->name('subscriber.destroy');
 
@@ -56,8 +69,16 @@ Route::group(['as'=>'author.','prefix'=>'author','namespace'=>'Author','middlewa
     Route::put('profile-update','SettingsController@updateProfile')->name('profile.update');
     Route::put('password-update','SettingsController@updatePassword')->name('password.update');
 
+    Route::get('comments/','CommentController@index')->name('comment.index');
+    Route::delete('comments/{id}','CommentController@destroy')->name('comment.destroy');
+
     Route::resource('post','PostController');
 
     Route::get('/favorite','FavoriteController@index')->name('favorite.index');
 
 } );
+
+View::composer('layouts.frontend.partial.footer',function ($view){
+    $categories = App\Category::all();
+    $view->with('categories',$categories);
+});

@@ -1,7 +1,7 @@
 @extends('layouts.frontend.app')
 
 @section('tittle')
-    Posts
+    Category
 @endsection
 
 @push('css')
@@ -12,8 +12,8 @@
     <style>
         .header-bg{
             width: 100%;
-            height: 200px;
-            {{--background-image: url("{{ asset('storage/post/'.$post->image) }}");--}}
+            height: 350px;
+            background-image: url("{{ asset('storage/category/'.$category->image) }}");
             background-size: cover;
 
         }
@@ -26,15 +26,15 @@
 
 @section('content')
 
-    <div class="slider display-table center-text">
-        <h1 class="title display-table-cell"><b>ALL POSTS</b></h1>
+    <div class="slider display-table center-text header-bg">
+        <h1 class="title display-table-cell"><b>{{ $category->name }}</b></h1>
     </div><!-- slider -->
 
     <section class="blog-area section">
         <div class="container">
 
             <div class="row">
-
+                @if($posts->count() > 0)
                 @foreach($posts as $post)
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100">
@@ -42,7 +42,7 @@
 
                                 <div class="blog-image"><img src="{{ asset('storage/post/'.$post->image) }}" alt="{{ $post->tittle }}"></div>
 
-                                <a class="avatar" href=""><img src="{{ asset('storage/profile/'.$post->user->image) }}" alt="Profile Image"></a>
+                                <a class="avatar" href="{{ route('author.profile',$post->user->username) }}"><img src="{{ asset('storage/profile/'.$post->user->image) }}" alt="Profile Image"></a>
 
                                 <div class="blog-info">
 
@@ -76,12 +76,25 @@
                             </div><!-- single-post -->
                         </div><!-- card -->
                     </div><!-- col-lg-4 col-md-6 -->
-
                 @endforeach
+                @else
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <div class="single-post post-style-1">
+                                <div class="blog-info">
 
+                                    <h4 class="title"> No Item Founf </h4>
+
+
+                                </div><!-- blog-info -->
+                            </div><!-- single-post -->
+                        </div><!-- card -->
+                    </div><!-- col-lg-4 col-md-6 -->
+
+                @endif
             </div><!-- row -->
 
-            {{ $posts->links() }}
+{{--            {{ $posts->links() }}--}}
 
         </div><!-- container -->
     </section><!-- section -->

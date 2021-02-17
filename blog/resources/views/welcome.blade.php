@@ -28,7 +28,7 @@
 
                 @foreach($categories as $category)
                     <div class="swiper-slide">
-                        <a class="slider-category" href="#">
+                        <a class="slider-category" href="{{ route('category.posts',$category->slug) }}">
                             {{--    according to tutrial its not working   <div class="blog-image"><img src="{{ Storage::disk('public')->url('category/slider/'.$category->image) }}" alt="{{  $category->name  }}"></div>--}}
 
                             <div class="blog-image"><img src="{{ asset('storage/category/slider/'.$category->image) }}" alt="{{  $category->name  }}"></div>
@@ -64,7 +64,7 @@
 
                                 <div class="blog-image"><img src="{{ asset('storage/post/'.$post->image) }}" alt="{{ $post->tittle }}"></div>
 
-                                <a class="avatar" href=""><img src="{{ asset('storage/profile/'.$post->user->image) }}" alt="Profile Image"></a>
+                                <a class="avatar" href="{{ route('author.profile',$post->user->username) }}"><img src="{{ asset('storage/profile/'.$post->user->image) }}" alt="Profile Image"></a>
 
                                 <div class="blog-info">
 
@@ -90,7 +90,7 @@
                                             @endguest
 
                                         </li>
-                                        <li><a href="#"><i class="ion-chatbubble"></i>6</a></li>
+                                        <li><a href="#"><i class="ion-chatbubble"></i>{{ $post->comments->count() }}</a></li>
                                         <li><a href="#"><i class="ion-eye"></i>{{ $post->view_count }}</a></li>
                                     </ul>
 

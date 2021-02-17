@@ -1,7 +1,7 @@
 @extends('layouts.backend.app')
 
 @section('tittle')
-    Category
+    Authors
 @endsection
 
 @push('css')
@@ -12,22 +12,14 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="block-header">
-            <h2>
-                <a class="btn btn-primary" href="{{ route('admin.category.create') }}">
-                    <i class="material-icons">add</i>
-                    <span>Add New Category</span>
-                </a>
-            </h2>
-        </div>
         <!-- Exportable Table -->
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="header">
                         <h2>
-                            All Categories
-                            <span class="badge bg-blue" > {{ $categories->count() }} </span>
+                            All Authors
+                            <span class="badge bg-blue" > {{ $authors->count() }} </span>
                         </h2>
                     </div>
                     <div class="body">
@@ -37,9 +29,10 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Post Count</th>
+                                    <th>Posts</th>
+                                    <th>Comments</th>
+                                    <th>Favorite Posts</th>
                                     <th>Created at</th>
-                                    <th>Updated at</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -47,39 +40,40 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Post Count</th>
+                                    <th>Posts</th>
+                                    <th>Comments</th>
+                                    <th>Favorite Posts</th>
                                     <th>Created at</th>
-                                    <th>Updated at</th>
                                     <th>Action</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                    @foreach($categories as $key=>$category)
+                                    @foreach($authors as $key=>$author)
                                         <tr>
                                             <th>
                                                 {{ $key + 1 }}
                                             </th>
                                             <th>
-                                                {{ $category->name }}
+                                                {{ $author->name }}
                                             </th>
                                             <th>
-                                                {{ $category->posts->count() }}
+                                                {{ $author->posts_count}}
                                             </th>
                                             <th>
-                                                {{ $category->created_at }}
+                                                {{ $author->comments_count}}
                                             </th>
                                             <th>
-                                                {{ $category->updated_at }}
+                                                {{ $author->favorite_posts_count}}
                                             </th>
                                             <th>
-                                                <a href="{{ route('admin.category.edit',$category->id) }}" class="btn btn-info">
-                                                    <i class="material-icons">edit</i>
-                                                </a>
+                                                {{ $author->created_at }}
+                                            </th>
+                                            <th>
 
-                                                <button class="btn btn-danger" type="button" onclick="deleteCategory({{ $category->id }})" >
+                                                <button class="btn btn-danger" type="button" onclick="deleteAuthor({{ $author->id }})" >
                                                     <i class="material-icons">delete</i>
                                                 </button>
-                                                <form action="{{ route('admin.category.destroy',$category->id) }}" method="post" id="delete-form-{{$category->id}}" style="display: none">
+                                                <form action="{{ route('admin.author.destroy',$author->id) }}" method="post" id="delete-form-{{$author->id}}" style="display: none">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>
@@ -119,7 +113,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script type="text/javascript">
-        function deleteCategory(id){
+        function deleteAuthor(id){
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',

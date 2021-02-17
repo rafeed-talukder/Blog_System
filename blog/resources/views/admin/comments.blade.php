@@ -1,7 +1,7 @@
 @extends('layouts.backend.app')
 
 @section('tittle')
-    Post
+    Comment
 @endsection
 
 @push('css')
@@ -18,8 +18,8 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            All Favorite Post's
-                            <span class="badge bg-blue" > {{ $posts->count() }} </span>
+                            All Comments
+                            <span class="badge bg-blue" > {{ $comments->count() }} </span>
                         </h2>
                     </div>
                     <div class="body">
@@ -27,57 +27,66 @@
                             <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Tittle</th>
-                                    <th>Author</th>
-                                    <th> <i class="material-icons">favorite</i> </th>
-{{--                                    <th> <i class="material-icons">comment</i> </th>--}}
-                                    <th> <i class="material-icons">visibility</i> </th>
-                                    <th>Action</th>
+                                    <th class="text-center" >Comment Info</th>
+                                    <th class="text-center" >Post Info</th>
+                                    <th class="text-center" >Action</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Tittle</th>
-                                    <th>Author</th>
-                                    <th> <i class="material-icons">favorite</i> </th>
-{{--                                    <th> <i class="material-icons">comment</i> </th>--}}
-                                    <th> <i class="material-icons">visibility</i> </th>
-                                    <th>Action</th>
+                                    <th class="text-center" >Comment Info</th>
+                                    <th class="text-center" >Post Info</th>
+                                    <th class="text-center" >Action</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                @foreach($posts as $key=>$post)
+                                @foreach($comments as $key=>$comment)
                                     <tr>
-                                        <th>
-                                            {{ $key + 1 }}
-                                        </th>
-                                        <th>
-                                            {{ str_limit($post->tittle,'10') }}
-                                        </th>
-                                        <th>
-                                            {{ $post->user->name}}
-                                        </th>
-                                        <th>
-                                            {{ $post->favorite_to_users->count()}}
-                                        </th>
-                                        <th>
-                                            {{ $post->view_count  }}
-                                        </th>
-                                        <th>
-                                            <a href="{{ route('admin.post.show',$post->id) }}" class="btn btn-info">
-                                                <i class="material-icons">visibility</i>
-                                            </a>
+                                        <td>
+                                            <div class="media">
+                                                <div class="media-left" >
+                                                    <a href="#">
+                                                        <img class="media-object" src="{{ asset('storage/profile/'.$comment->user->image) }}" alt="" height="64" width="64">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body" >
+                                                    <h4  class="media-heading">
+                                                        {{ $comment->user->name }}
+                                                        <small>{{ $comment->created_at->diffForHumans() }}  </small>
+                                                    </h4>
+                                                    <p>{{ $comment->comment }}</p>
+                                                    <a target="_blank" href="{{ route('post.details', $comment->post->slug.'#comments') }}">Reply</a>
+                                                </div>
+                                            </div>
+                                        </td>
 
-                                            <button class="btn btn-danger" type="button" onclick="removePost({{ $post->id }})" >
+                                        <td>
+                                            <div class="media">
+                                                <div class="media-right" >
+                                                    <a href="#">
+                                                        <img class="media-object" src="{{ asset('storage/post/'.$comment->post->image) }}" alt="" height="64" width="64">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body" >
+                                                    <a target="_blank" href="{{ route('post.details', $comment->post->slug) }}">
+                                                        <h4  class="media-heading">
+                                                            {{ str_limit( $comment->post->tittle,'40' ) }}
+                                                        </h4>
+                                                    </a>
+                                                    <p> By-<strong> {{ $comment->post->user->name }} </strong> </p>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <button class="btn btn-danger" type="button" onclick="deleteComment({{ $comment->id }})" >
                                                 <i class="material-icons">delete</i>
                                             </button>
-                                            <form action="{{ route('post.favorite',$post->id) }}" method="post" id="remove-form-{{$post->id}}" style="display: none">
+                                            <form action="{{ route('admin.comment.destroy',$comment->id) }}" method="post" id="delete-form-{{$comment->id}}" style="display: none">
                                                 @csrf
+                                                @method('DELETE')
                                             </form>
-                                        </th>
-
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -113,7 +122,7 @@
 
     <script type="text/javascript">
 
-        function removePost(id){
+        function deleteComment(id){
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -134,7 +143,7 @@
                 if (result.isConfirmed) {
                     swalWithBootstrapButtons.fire(
                         // event.preventDefault();
-                        document.getElementById('remove-form-'+ id).submit()
+                        document.getElementById('delete-form-'+ id).submit()
                     )
                 } else if (
                     /* Read more about handling dismissals below */

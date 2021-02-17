@@ -1,7 +1,7 @@
 @extends('layouts.frontend.app')
 
 @section('tittle')
-    Category
+    {{ $query }}
 @endsection
 
 @push('css')
@@ -10,13 +10,7 @@
     <link href="{{ asset('assets/frontend/css/category/responsive.css') }}" rel="stylesheet">
 
     <style>
-        .header-bg{
-            width: 100%;
-            height: 350px;
-            background-image: url("{{ asset('storage/category/'.$category->image) }}");
-            background-size: cover;
 
-        }
         .favorite_posts{
             color: #0D47A1;
         }
@@ -27,7 +21,7 @@
 @section('content')
 
     <div class="slider display-table center-text header-bg">
-        <h1 class="title display-table-cell"><b>{{ $category->name }}</b></h1>
+        <h1 class="title display-table-cell"><b>{{ $posts->count() }} Results for {{ $query }}</b></h1>
     </div><!-- slider -->
 
     <section class="blog-area section">
@@ -42,7 +36,7 @@
 
                                 <div class="blog-image"><img src="{{ asset('storage/post/'.$post->image) }}" alt="{{ $post->tittle }}"></div>
 
-                                <a class="avatar" href=""><img src="{{ asset('storage/profile/'.$post->user->image) }}" alt="Profile Image"></a>
+                                <a class="avatar" href="{{ route('author.profile',$post->user->username) }}"><img src="{{ asset('storage/profile/'.$post->user->image) }}" alt="Profile Image"></a>
 
                                 <div class="blog-info">
 
@@ -78,12 +72,12 @@
                     </div><!-- col-lg-4 col-md-6 -->
                 @endforeach
                 @else
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-12 col-md-12">
                         <div class="card h-100">
                             <div class="single-post post-style-1">
                                 <div class="blog-info">
 
-                                    <h4 class="title"> No Item Founf </h4>
+                                    <h4 class="title"> No Item Found </h4>
 
 
                                 </div><!-- blog-info -->
